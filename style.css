@@ -1,0 +1,9 @@
+.border_box {
+    border: 2px solid #2196f3;
+    padding: 10px;
+}
+
+.logo {
+    border: 2px solid #2196f3;
+    border-radius: 50%;
+}
