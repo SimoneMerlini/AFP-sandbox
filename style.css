@@ -7,10 +7,39 @@
 
 .border_box {
     border: 2px solid #2196f3;
+    margin-bottom: 10px;
     padding: 10px;
+}
+ul {
+    padding-left: 20px;
+}
+
+.layout-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    width: 100%;
+    gap: 10px;
+}
+.layout-side {
+    width: 20%;
+}
+.layout-main {
+    flex: 1;
+    width: 80%;
 }
 
 .logo {
+    position: relative;
+    z-index: 100;
+    width: 64px;
+    height: 64px;
     border: 2px solid #2196f3;
+    border-radius: 50%;
+}
+img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     border-radius: 50%;
 }
