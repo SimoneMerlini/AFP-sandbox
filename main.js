@@ -30,20 +30,20 @@ La concatenazione si può eseguire con + o ,.
 console.log("Somma: " + c);
 console.log("Somma: ", c);
 
-// Tipi di dato possibili in JS: undefined, null, nan e infinity
+// Tipi di dato possibili in JS: undefined, null, nan e infinity.
 let w = undefined;
 let x = null;
 let y = NaN;
 let z = Infinity;
 
 let numero = 10;
-// Carattere inglobato nella stringa
+// Carattere inglobato nella stringa.
 let stringa = "Ciao"; 
 let booleano = true;
 let array = [1, 2, 3];
 let oggetto = { nome: "Simone", cognome: "Merlini" };
 
-// Metodo più comune per dichiarare una funzione
+// Metodo più comune per dichiarare una funzione.
 function somma(a, b) {
     /* 
     c = a + b; 
@@ -56,7 +56,7 @@ function somma(a, b) {
 };
 console.log("Somma: " + somma(5, 10));
 
-// Lambda function (funzione anonima) con arrow function
+// Lambda function (funzione anonima) con arrow function.
 const sottrazione = (a, b) => {
     let c = a - b; 
     return c;
