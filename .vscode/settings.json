@@ -1,5 +1,9 @@
 {
     "conventionalCommits.scopes": [
-        "introduction"
+        "introduction",
+        "newfile",
+        "comment",
+        "style",
+        "wip"
     ]
 }

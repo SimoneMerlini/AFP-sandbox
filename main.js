@@ -44,8 +44,20 @@ let array = [1, 2, 3];
 let oggetto = { nome: "Simone", cognome: "Merlini" };
 
 // Metodo più comune per dichiarare una funzione
-function funzione(a, b) {
-    c = a + b;
+function somma(a, b) {
+    /* 
+    c = a + b; 
+    dichiarazione implicita di c -> non consigliata
+
+    comportamento simile a var -> visibile anche fuori scope
+    */
+    let c = a + b;
     return c;
 };
-console.log("Somma: " + funzione(5, 10));
+console.log("Somma: " + somma(5, 10));
+
+// Lambda function (funzione anonima) con arrow function
+const sottrazione = (a, b) => {
+    let c = a - b; 
+    return c;
+};
