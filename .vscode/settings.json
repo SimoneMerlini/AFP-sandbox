@@ -5,6 +5,7 @@
         "comment",
         "style",
         "wip",
-        "void/null"
+        "void/null",
+        "movedfile"
     ]
 }
