@@ -61,3 +61,28 @@ const sottrazione = (a, b) => {
     let c = a - b; 
     return c;
 };
+
+// Dichiarazione di un array con [] o con la classe Array().
+let lettere = [];
+let numeri = Array();
+
+/*
+Inserimento di elementi in un array con il metodo push().
+
+Javascript è un linguaggio a tipizzazione debole, quindi è possibile 
+inserire elementi di tipo diverso nello stesso array.
+*/
+lettere.push("a");
+lettere.push(1);
+lettere.push(true);
+lettere.push({ nome: "Simone", cognome: "Merlini" });
+lettere.push(lettere);
+
+console.log(lettere);
+
+// Rimozione di elementi in un array con il metodo pop().
+lettere.pop();
+
+console.log(lettere);
+
+lettere = undefined;
