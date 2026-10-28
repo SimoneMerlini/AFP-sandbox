@@ -69,6 +69,20 @@ const cardList = [
             dimensione: "",
             raggio: ""
         }
+    },
+    {
+        contenuto: {
+            titolo: "Void", // h1
+            sottotitolo:"Void/null", // h2
+            testo: "n/a", // p
+            immagine: "" // img
+        },
+        bordo: {
+            colore: "",
+            stile: "",
+            dimensione: "",
+            raggio: ""
+        }
     }
 ];
 
@@ -76,7 +90,6 @@ const cardContainer = document.querySelector("#card-container-main");
 
 const listaFigli = cardContainer.children;
 const nFigliTot = listaFigli.length;
-``
 
 for (let i = 0; i < nFigliTot; i++) {
     console.log(`Elemento figlio ${i}: `, listaFigli[0].children[0].textContent);
@@ -119,6 +132,10 @@ function createCardElement(cardData){
     return cardElement;
 }
 
+document.querySelector("#solo-immagini").addEventListener("click", soloImmagini);
+document.querySelector("#solo-testo").addEventListener("click", soloTesto);
+document.querySelector("#mostra-tutto").addEventListener("click", mostraTutto);
+
 const renderCards = (cardList) => {
     cardList.forEach((item) => {
         const cardTmp = createCardElement(item);
@@ -151,3 +168,18 @@ function mostraTutto(){
     cardContainer.innerHTML = "";
     renderCards(cardList);
 }
+
+const filterInput = document.querySelector("#filter-input");
+
+filterInput.addEventListener("input", (event) => {
+    const testoFiltro = event.target.value.toLowerCase();
+    const cardFiltrate = cardList.filter((item) => {
+        const titolo = item.contenuto.titolo.toLowerCase();
+        console.log(testoFiltro);
+        
+        return titolo.includes(testoFiltro);
+    });
+
+    cardContainer.innerHTML = "";
+    renderCards(cardFiltrate);
+});

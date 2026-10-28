@@ -60,6 +60,10 @@ ul {
     border-radius: 5px;
     cursor: pointer;
 }
+img {
+    width: 150px;
+    height: 90px;
+}
 
 .logo {
     position: relative;
