@@ -1,25 +1,11 @@
-let card = {
-    contenuto: {
-        titolo: "Primo posto", // h1
-        sottotitolo:"Sci aplinismo", // h2
-        testo: "Primo classificato alle olimpiadi", // p
-        immagine: "" // img
-    },
-    bordo: {
-        colore: "",
-        stile: "",
-        dimensione: "",
-        raggio: ""
-    }
-}
-
+"use strict";
 const cardList = [
     {
         contenuto: {
-            titolo: "Aggiungi", // h1
-            sottotitolo:"Recapita multa", // h2
-            testo: "servizio esclusivo di guardia ambientale", // p
-            immagine: "assets/img/ambiente.png" // img
+            titolo: "Primo posto", // h1
+            sottotitolo:"Sci aplinismo", // h2
+            testo: "Primo classificato alle olimpiadi", // p
+            immagine: "TriageColorEntity.jpg" // img
         },
         bordo: {
             colore: "",
@@ -30,10 +16,10 @@ const cardList = [
     },
     {
         contenuto: {
-            titolo: "Modifica", // h1
-            sottotitolo:"Variazioni multe esistenti", // h2
-            testo: "servizio esclusivo di guardia ambientale", // p
-            immagine: "assets/img/ambiente.png" // img
+            titolo: "Secondo posto", // h1
+            sottotitolo:"Sci aplinismo", // h2
+            testo: "Secondo classificato alle olimpiadi", // p
+            immagine: "" // img
         },
         bordo: {
             colore: "",
@@ -44,10 +30,10 @@ const cardList = [
     },
     {
         contenuto: {
-            titolo: "Storico", // h1
-            sottotitolo:"Visualizza multe e stati", // h2
-            testo: "servizio misto tra guardia e civili", // p
-            immagine: "assets/img/ambiente.png" // img
+            titolo: "Terzo posto", // h1
+            sottotitolo:"Sci aplinismo", // h2
+            testo: "Terzo classificato alle olimpiadi", // p
+            immagine: "" // img
         },
         bordo: {
             colore: "",
@@ -58,10 +44,24 @@ const cardList = [
     },
     {
         contenuto: {
-            titolo: "Elimina", // h1
-            sottotitolo:"Ritira multa", // h2
-            testo: "servizio esclusivo di guardia ambientale", // p
-            immagine: "assets/img/ambiente.png" // img
+            titolo: "Quarto posto", // h1
+            sottotitolo:"Sci aplinismo", // h2
+            testo: "Quarto classificato alle olimpiadi", // p
+            immagine: "TriageColorEntity.png" // img
+        },
+        bordo: {
+            colore: "",
+            stile: "",
+            dimensione: "",
+            raggio: ""
+        }
+    },
+    {
+        contenuto: {
+            titolo: "Quinto", // h1
+            sottotitolo:"Sci aplinismo", // h2
+            testo: "Quarto classificato alle olimpiadi", // p
+            immagine: "TriageColorEntity.png" // img
         },
         bordo: {
             colore: "",
@@ -71,7 +71,6 @@ const cardList = [
         }
     }
 ];
-
 const cardContainer = document.querySelector("#card-container-main");
 const filtroInput = document.querySelector("#filter-input");
 const checkFiltri = document.querySelector("#enable-adv-filter")
@@ -81,30 +80,37 @@ const btnImgJpg = document.querySelector("#btn-only-img-jpg");
 const btnText = document.querySelector("#btn-only-text");
 const btnAll = document.querySelector("#btn-all");
 
+const form = document.querySelector("#card-form");
+
+const inputTitolo = document.querySelector("#titolo");
+const inputSottotitolo = document.querySelector("#sottotitolo");
+const inputTesto = document.querySelector("#testo");
+const inputImmagine = document.querySelector("#immagine");
+
 btnImg.addEventListener("click", () => {
-    categoriaAttiva = "IMMAGINI";
+    categoriaAttiva = Categorie.IMMAGINI;
     applicaFiltriGlobali();
 });
 
 btnText.addEventListener("click", () => {
-    categoriaAttiva = "TESTO";
+    categoriaAttiva = Categorie.TESTO;
     applicaFiltriGlobali();
 });
 
 btnAll.addEventListener("click", () => {
-    categoriaAttiva = "TUTTO";
+    categoriaAttiva = Categorie.TUTTI;
     applicaFiltriGlobali();
 });
 
 btnImgJpg.addEventListener("click", () => {
-    categoriaAttiva = "JPG";
+    categoriaAttiva = Categorie.JPG;
     applicaFiltriGlobali();
 });
 
 filtroInput.addEventListener("input", (e) => {
     testoRicerca = e.target.value.toLowerCase();
 
-    if (!filtriAvanzatiAttivi) categoriaAttiva = "TUTTI";
+    if (!filtriAvanzatiAttivi) categoriaAttiva = Categorie["TUTTI"]; // SAME AS categoriaAttiva = Categorie.TUTTI
 
     applicaFiltriGlobali();
 });
@@ -112,10 +118,61 @@ filtroInput.addEventListener("input", (e) => {
 checkFiltri.addEventListener("change", (e) => {
     filtriAvanzatiAttivi = e.target.checked;
 
-    if (!filtriAvanzatiAttivi && testoRicerca !== "") categoriaAttiva = "TUTTI";
+    if (!filtriAvanzatiAttivi && testoRicerca !== "") categoriaAttiva = Categorie.TUTTI;
 
     applicaFiltriGlobali();
 });
+
+form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    // RECUPERARE I VALORI DEGLI INPUT
+    const titolo = inputTitolo.value.trim();
+    const sottotitolo = inputSottotitolo.value.trim();
+    const testo = inputTesto.value.trim();
+    const immagine = inputImmagine.value.trim();
+
+    // CONTROLLO VALORI NON VUOTI
+    if (!titolo || titolo.length < 3) {
+        alert("Titolo non valido");
+        return;
+    }
+    if (!sottotitolo || sottotitolo.length < 3) {
+        alert("Sottotitolo non valido");
+        return;
+    }
+    if (!testo) {
+        alert("Testo non valido");
+        return;
+    }
+    // if (immagine.length === 0) alert("Immagine non valida"); CONTROLLO SALTABILE
+
+    // CREARE OGGETTO CARD
+    const nuovaCard = {
+        contenuto: {
+            titolo: titolo,
+            sottotitolo: sottotitolo,
+            testo: testo,
+            immagine: immagine,
+        },
+        bordo: {
+            colore: "",
+            stile: "",
+            dimensione: "",
+            raggio: ""
+        }
+    };
+
+    // CARICHIAMO LA CARD DENTRO cardList
+    cardList.push(nuovaCard);
+
+    // RESET DELLA FORM
+    form.reset();
+
+    // RENDERIZZARE LE CARD NUOVE
+    applicaFiltriGlobali();
+})
+
 
 const Categorie = Object.freeze({
     TUTTI: "TUTTI",
@@ -135,7 +192,7 @@ function applicaFiltriGlobali(){
     // A) Aggiornare stile bottoni
     resetAllFilterButton();
     if (categoriaAttiva === Categorie.TUTTI) enableBtn(btnAll);
-    if (categoriaAttiva === Categorie.IMMAGII) enableBtn(btnImg);
+    if (categoriaAttiva === Categorie.IMMAGINI) enableBtn(btnImg);
     if (categoriaAttiva === Categorie.TESTO) enableBtn(btnText);
     if (categoriaAttiva === Categorie.JPG) enableBtn(btnImgJpg);
 
@@ -143,15 +200,15 @@ function applicaFiltriGlobali(){
     let risCorrenti = cardList;
 
     // STEP 1. filtri Per categoria
-    if (categoriaAttiva === "IMMAGINI"){
+    if (categoriaAttiva === Categorie.IMMAGINI){
         risCorrenti = risCorrenti.filter(
             item => item.contenuto.immagine !== ""
         );
-    }else if(categoriaAttiva === "TESTO"){
+    }else if(categoriaAttiva === Categorie.TESTO){
         risCorrenti = risCorrenti.filter(
             item => item.contenuto.immagine === ""
         )
-    }else if(categoriaAttiva === "JPG"){
+    }else if(categoriaAttiva === Categorie.JPG){
         risCorrenti = risCorrenti.filter(
             item => item.contenuto.immagine.endsWith(".jpg")
         )
