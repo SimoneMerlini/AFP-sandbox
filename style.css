@@ -1,81 +1,99 @@
-* {
-    margin: 0px;
-    padding: 0px;
+*{
+    margin: 0;
+    padding: 0;
 
     box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-.border_box {
-    border: 2px solid #2196f3;
+.border_box{
+    border: 3px solid #2196F3;
+    padding: 20px;
     margin-bottom: 10px;
-    padding: 10px;
-}
-ul {
-    padding-left: 20px;
+    /* text-align: center; */
 }
 
-.layout-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: start;
-    width: 100%;
-    gap: 10px;
-}
-.layout-side {
-    width: 20%;
-}
-.layout-main {
-    flex: 1;
-    width: 80%;
-}
-@media screen and (max-width: 500px) {
-    .layout-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: start;
-        width: 100%;
-        gap: 10px;
-    }
-    .layout-side {
-        width: 100%;
-    }
-    .layout-main {
-        flex: 1;
-        width: 100%;
-    }
+#header_afp{
+    text-align: center;
 }
 
-.card-container {
+.layout-container{
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
     gap: 20px;
-    margin-top: 10px;
 }
-.card {
-    width: 300px;
-    height: 200px;
-    border: 2px solid #f3b121;
+
+#main-content{
+    flex: 1;
+    /* height:max-content; */
+}
+
+.card-container{
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.card{
+    border: solid 2px orange;
     padding: 10px;
-    border-radius: 5px;
+
+    border-radius: 15px;
     cursor: pointer;
 }
-img {
-    width: 150px;
-    height: 90px;
+
+.bg-green{
+    background-color: forestgreen;
+    color: black;
 }
 
-.logo {
-    position: relative;
-    z-index: 100;
-    width: 64px;
-    height: 64px;
-    border: 2px solid #2196f3;
-    border-radius: 50%;
+.card-active{
+    background-color: deeppink;
+    border: 8px dotted aquamarine;
 }
-.img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
+
+.btn-active{
+    background-color: coral;
 }
+
+#card-form{
+    border: solid 1px grey;
+
+    margin-top: 10px;
+}
+
+.card-form-inputs{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.form-input{
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+}
+
+
+/**
+    L - I
+    L - I
+
+    L
+    I
+
+
+
+ */
+
+
+
+
+
+
+
+
+
+
+
