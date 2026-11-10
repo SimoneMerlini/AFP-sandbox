@@ -1,12 +1,13 @@
 "use strict";
-const cardList = [
+/*
+let cardList = [
     {
         id: "0",
         contenuto: {
             titolo: "Primo posto", // h1
             sottotitolo:"Sci aplinismo", // h2
             testo: "Primo classificato alle olimpiadi", // p
-            immagine: "assets/TriageColorEntity.jpg" // img
+            immagine: "TriageColorEntity.jpg" // img
         },
         bordo: {
             colore: "",
@@ -16,6 +17,7 @@ const cardList = [
         }
     },
     {
+        id: "1",
         contenuto: {
             titolo: "Secondo posto", // h1
             sottotitolo:"Sci aplinismo", // h2
@@ -30,6 +32,7 @@ const cardList = [
         }
     },
     {
+        id: "2",
         contenuto: {
             titolo: "Terzo posto", // h1
             sottotitolo:"Sci aplinismo", // h2
@@ -44,11 +47,12 @@ const cardList = [
         }
     },
     {
+        id: "3",
         contenuto: {
             titolo: "Quarto posto", // h1
             sottotitolo:"Sci aplinismo", // h2
             testo: "Quarto classificato alle olimpiadi", // p
-            immagine: "assets/TriageColorEntity.png" // img
+            immagine: "TriageColorEntity.png" // img
         },
         bordo: {
             colore: "",
@@ -58,11 +62,12 @@ const cardList = [
         }
     },
     {
+        id: "4",
         contenuto: {
             titolo: "Quinto", // h1
             sottotitolo:"Sci aplinismo", // h2
             testo: "Quarto classificato alle olimpiadi", // p
-            immagine: "assets/TriageColorEntity.png" // img
+            immagine: "TriageColorEntity.png" // img
         },
         bordo: {
             colore: "",
@@ -72,6 +77,9 @@ const cardList = [
         }
     }
 ];
+*/
+const LOCAL_STORAGE_KEY = "afp_card_list_2026";
+let cardList = caricaCardList();
 const cardContainer = document.querySelector("#card-container-main");
 const filtroInput = document.querySelector("#filter-input");
 const checkFiltri = document.querySelector("#enable-adv-filter")
@@ -88,7 +96,12 @@ const inputSottotitolo = document.querySelector("#sottotitolo");
 const inputTesto = document.querySelector("#testo");
 const inputImmagine = document.querySelector("#immagine");
 
-let idModifica = null;
+const formTitle = document.querySelector("#card-form>h3");
+const btnSubmit = document.querySelector("#card-form>button[type='submit']");
+const btnRollbackEdit = document.querySelector("#btn-rollback-edit");
+
+// Variabile per tenere traccia della card in modifica
+let idCardinModifica = null;
 
 btnImg.addEventListener("click", () => {
     categoriaAttiva = Categorie.IMMAGINI;
@@ -150,24 +163,37 @@ form.addEventListener("submit", (e) => {
     }
     // if (immagine.length === 0) alert("Immagine non valida"); CONTROLLO SALTABILE
 
-    // CREARE OGGETTO CARD
-    const nuovaCard = {
-        contenuto: {
-            titolo: titolo,
-            sottotitolo: sottotitolo,
-            testo: testo,
-            immagine: immagine,
-        },
-        bordo: {
-            colore: "",
-            stile: "",
-            dimensione: "",
-            raggio: ""
+    if (idCardinModifica !== null){
+        // MODIFICA CARD ESISTENTE
+        const cardTarget = cardList.find(card => card.id === idCardinModifica);
+        if (cardTarget){
+            cardTarget.contenuto.titolo = titolo;
+            cardTarget.contenuto.sottotitolo = sottotitolo;
+            cardTarget.contenuto.testo = testo;
+            cardTarget.contenuto.immagine = immagine;
         }
-    };
+        resetFormModifica();
+    }else{
+        // CREARE NUOVA CARD
+        const nuovaCard = {
+            id: Date.now().toString(),
+            contenuto: {
+                titolo: titolo,
+                sottotitolo: sottotitolo,
+                testo: testo,
+                immagine: immagine,
+            },
+            bordo: {
+                colore: "",
+                stile: "",
+                dimensione: "",
+                raggio: ""
+            }
+        };
+        cardList.push(nuovaCard);
+    }
 
-    // CARICHIAMO LA CARD DENTRO cardList
-    cardList.push(nuovaCard);
+    salvaCardList();
 
     // RESET DELLA FORM
     form.reset();
@@ -231,8 +257,6 @@ function applicaFiltriGlobali(){
     renderizzaCards(risCorrenti);
 }
 
-applicaFiltriGlobali();
-
 // -- FN OPERATIVE --
 function disableBtn(btn){
     btn.classList.remove("btn-active");
@@ -290,67 +314,110 @@ function createCardElement(cardData){
         cardElement.appendChild(img);
     }
 
-    const boxAzione = document.createElement("div");
-    boxAzione.style.display = "flex";
-    boxAzione.style.gap = "10px";
-    boxAzione.style.marginTop = "10px";
+    /**
+     * - margin top: 10px
+     * - flex
+     * - gap: 8px
+     * @type {HTMLDivElement}
+     */
+    const boxAzioni = document
+        .createElement("div");
+    boxAzioni.style.marginTop = "10px";
+    boxAzioni.style.display = "flex";
+    boxAzioni.style.gap = "10px";
 
-    const btnModifica = document.createElement("button");
+    // BTN MODIFICA
+    const btnModifica = document
+        .createElement("button");
     btnModifica.textContent = "Modifica";
     btnModifica.style.cursor = "pointer";
     btnModifica.addEventListener("click", (e) => {
-        e.stopPropagation(); // Impedisce la propagazione dell'evento click alla card
-        modificaCard(cardData);
+        e.stopPropagation();
+        preparaModificaCard(cardData);
     });
 
+    // BTN ELIMINA
     const btnElimina = document.createElement("button");
     btnElimina.textContent = "Elimina";
     btnElimina.style.cursor = "pointer";
     btnElimina.addEventListener("click", (e) => {
-        e.stopPropagation(); // Impedisce la propagazione dell'evento click alla card
+        e.stopPropagation();
         eliminaCard(cardData.id);
     });
 
-    boxAzione.appendChild(btnModifica);
-    boxAzione.appendChild(btnElimina);
+    boxAzioni.appendChild(btnModifica);
+    boxAzioni.appendChild(btnElimina);
 
-    cardElement.appendChild(boxAzione);
-
-    function modificaCard(cardData) {
-        idModifica = cardData.id;
-        inputTitolo.value = cardData.contenuto.titolo;
-        inputSottotitolo.value = cardData.contenuto.sottotitolo;
-        inputTesto.value = cardData.contenuto.testo;
-        inputImmagine.value = cardData.contenuto.immagine;
-
-        if (formTitolo) {formTitolo.textContent = "Modifica card con id: " + cardData.id
-            formTitolo.textContent = "Modifica card con id: " + cardData.id;
-        }
-        if (btnSubmit) {
-            btnSubmit.textContent = "Salva modifiche";
-        }
-        if (rollbackBtn) {
-            rollbackBtn.style.display = "inline-block";
-        }
-
-        form.scrollIntoView({ behavior: "smooth" });
-    }
-
-    function resetForm() {
-        idModifica = null;
-
-        if (formTitolo) {
-            formTitolo.textContent = "Crea nuova card";
-        }
-        if (btnSubmit) {
-            btnSubmit.textContent = "Aggiungi card";
-        }
-        if (rollbackBtn) {
-            rollbackBtn.style.display = "none";
-        }
-    }
-
-    
+    cardElement.appendChild(boxAzioni);
 
     return cardElement;
+}
+
+function preparaModificaCard(cardData){
+    // Impostiamo la form in modalità modifica
+    idCardinModifica = cardData.id;
+
+    // Valorizziamo la form con in dati della card da modificare
+    inputTitolo.value = cardData.contenuto.titolo;
+    inputSottotitolo.value = cardData.contenuto.sottotitolo;
+    inputTesto.value = cardData.contenuto.testo;
+    inputImmagine.value = cardData.contenuto.immagine;
+
+    if (formTitle) formTitle.textContent = "Modifica card con ID: " + idCardinModifica;
+    if (btnSubmit) btnSubmit.textContent = "Salva Modifiche";
+    if (btnRollbackEdit) btnRollbackEdit.style.display = "inline-block";
+
+    form.scrollIntoView({behavior: "smooth"});
+}
+
+function resetFormModifica(){
+    idCardinModifica = null;
+
+    if (formTitle) formTitle.textContent = "Crea nuova card";
+    if (btnSubmit) btnSubmit.textContent = "Crea card";
+    if (btnRollbackEdit) btnRollbackEdit.style.display = "none";
+}
+
+function eliminaCard(id){
+    if (!confirm("Vuoi eliminare la card con ID: " + id + "?")) return;
+
+    cardList = cardList.filter(card => card.id !== id);
+
+    if (idCardinModifica === id){
+        form.reset();
+        resetFormModifica();
+    }
+
+    applicaFiltriGlobali();
+}
+function caricaCardList(){
+    const datiSalvati = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (!datiSalvati) {
+        return;
+    }
+
+    try {
+        return JSON.parse(datiSalvati);
+    } catch (ex) {
+        console.error("Errore nel parsing dei dati salvati: ", ex.message);
+    } finally {
+        console.log("Caricamento dati completato");
+    }
+}
+
+function salvaCardList(){
+    localStorage.setItem(
+        LOCAL_STORAGE_KEY,
+        JSON.stringify(cardList)
+    );
+}
+
+// --- CODICE OPERATIVO ---
+applicaFiltriGlobali();
+
+if (btnRollbackEdit){
+    btnRollbackEdit.addEventListener("click", () => {
+        form.reset();
+        resetFormModifica();
+    });
 }
